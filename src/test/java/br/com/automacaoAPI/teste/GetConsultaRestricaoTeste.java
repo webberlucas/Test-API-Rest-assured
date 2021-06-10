@@ -13,26 +13,22 @@ public class GetConsultaRestricaoTeste extends BaseTeste {
 
     @Test
     public void testRestricaoCPF(){
-
         given()
             .when()
                 .get(CONSULTA_RESTICAO_CPF,"24094592008")
             .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body("mensagem", is("O CPF 24094592008 tem problema"));
-                //.log().all();
     }
 
     @Test
     public void testNaoPossuiRestricaoCPF(){
 
         given()
-                .when()
+            .when()
                 .get(CONSULTA_RESTICAO_CPF,"66414919004")
-                .then()
+            .then()
                 .statusCode(HttpStatus.SC_NO_CONTENT);
-                //.body("mensagem", is("Não possui restrição"));
-                //.log().all();
     }
 
 }

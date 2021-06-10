@@ -15,6 +15,9 @@ public class GetRetornaSimulacaoTeste extends BaseTeste {
 
     // SINTAX RODAR TEST LINHA COMANDO MAVEN "mvn test -Dtest=SimulacoesCPFTeste#test* test"
 
+    static String cpf = "66414919004";
+    static String cpfNotExisting = "66414919999";
+
     @Test
     public void testSimulationReturnAllSimulationsExisting(){
 
@@ -28,25 +31,26 @@ public class GetRetornaSimulacaoTeste extends BaseTeste {
     @Test
     public void testSimulationReturnSimulationsWithCPF(){
 
+
         given()
-                .pathParam("paramCpf", "66414919004")
+                .pathParam("paramCpf", cpf)
             .when()
                 .get(EFETUA_OPERACOES_SIMULACAO +  "/{paramCpf}")
             .then().log().all()
                 .statusCode(HttpStatus.SC_OK)
-                .body("cpf", is("66414919004"));
+                .body("cpf", is(cpf));
     }
 
     @Test
     public void testSimulationWithCPFNotExisting(){
 
         given()
-                .pathParam("paramCpf", "66414919999")
+                .pathParam("paramCpf", cpfNotExisting)
             .when()
                 .get(EFETUA_OPERACOES_SIMULACAO + "/{paramCpf}")
             .then().log().all()
                 .statusCode(HttpStatus.SC_NOT_FOUND)
-                .body("mensagem", is("CPF 66414919999 não encontrado"));
+                .body("mensagem", is("CPF " + cpfNotExisting + " não encontrado"));
     }
 
 

@@ -26,9 +26,9 @@ public class PostInsereNovaSimulacaoTeste extends BaseTeste  {
                 true);
         given()
                 .body(simula)
-                .when()
+            .when()
                 .post(EFETUA_OPERACOES_SIMULACAO)
-                .then()//.log().all()
+            .then()//.log().all()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("mensagem", is("CPF duplicado"));
     }
@@ -50,25 +50,25 @@ public class PostInsereNovaSimulacaoTeste extends BaseTeste  {
                 .body(simula)
             .when()
                 .post(EFETUA_OPERACOES_SIMULACAO)
-            .then().log().all();
-                //.statusCode(HttpStatus.SC_CREATED)
-               // .body("cpf", is("98745632122"));
+            .then()//.log().all();
+                .statusCode(HttpStatus.SC_CREATED)
+                .body("cpf", is(simula.getCpf()));
     }
 
     @Test
     public void testSimulationInsetMissingAttribute(){
 
         SimulaCredCPF simula = new SimulaCredCPF(
-                "Jose Pai",
-                "JosePai@gmail.com",
+                "Jose Paii",
+                "JosePaii@gmail.com",
                 new BigDecimal(10000) ,
                 5,
                 false);
         given()
                 .body(simula)
-                .when()
+            .when()
                 .post(EFETUA_OPERACOES_SIMULACAO)
-                .then().log().all()
+            .then()//.log().all();
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("erros.cpf", is("CPF não pode ser vazio"));
     }
