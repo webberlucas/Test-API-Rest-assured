@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.*;
 
 import static io.restassured.RestAssured.*;
 
-public class RestricaoCPFTeste extends BaseTeste {
+public class GetConsultaRestricaoTeste extends BaseTeste {
 
     private static final String CONSULTA_RESTICAO_CPF = "/v1/restricoes/{0}";
 
