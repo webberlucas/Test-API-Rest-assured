@@ -4,7 +4,7 @@ import br.com.automacaoAPI.teste.BaseTeste;
 
 import java.math.BigDecimal;
 
-public class SimulaCredCPF {
+public class Cliente {
 
     private String nome;
     private String cpf;
@@ -13,9 +13,10 @@ public class SimulaCredCPF {
     private int parcelas;
     private boolean seguro;
 
-   // public SimulaCredCPF(){}
 
-    public SimulaCredCPF(String nome, String cpf, String email, BigDecimal valor, int parcelas, boolean seguro) {
+
+    public Cliente( String nome, String cpf, String email, BigDecimal valor, int parcelas, boolean seguro) {
+
         this.nome = nome;
         this.cpf = cpf;
         this.email = email;
@@ -24,13 +25,15 @@ public class SimulaCredCPF {
         this.seguro = seguro;
     }
 
-    public SimulaCredCPF(String nome, String email, BigDecimal valor, int parcelas, boolean seguro) {
+    public Cliente(String nome, String email, BigDecimal valor, int parcelas, boolean seguro) {
         this.nome = nome;
         this.email = email;
         this.valor = valor;
         this.parcelas = parcelas;
         this.seguro = seguro;
     }
+
+
 
     public String getNome() {
         return nome;

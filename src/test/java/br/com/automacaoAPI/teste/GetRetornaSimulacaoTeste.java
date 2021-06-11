@@ -1,54 +1,58 @@
 package br.com.automacaoAPI.teste;
 
-import br.com.automacaoAPI.model.SimulaCredCPF;
 import org.apache.http.HttpStatus;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Test;
 
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static io.restassured.RestAssured.*;
 
 public class GetRetornaSimulacaoTeste extends BaseTeste {
 
+    ArrayList arrayCPF;
 
-    // SINTAX RODAR TEST LINHA COMANDO MAVEN "mvn test -Dtest=SimulacoesCPFTeste#test* test"
-
-    static String cpf = "66414919004";
-    static String cpfNotExisting = "66414919999";
+    static String cpfNotExisting = "00000000000";
 
     @Test
-    public void testSimulationReturnAllSimulationsExisting(){
+    public void testSimulacaoRetornaTodosCPFExistentes(){
 
         given()
                 .when()
-                        .get(EFETUA_OPERACOES_SIMULACAO)
-                .then().log().all()
+                    .get(EFETUA_OPERACOES_SIMULACAO)
+                .then()
                     .statusCode(HttpStatus.SC_OK);
     }
 
     @Test
-    public void testSimulationReturnSimulationsWithCPF(){
+    public void testSimulacaRetornaClientePeloCPF(){
+        arrayCPF = new ArrayList();
 
+        arrayCPF = given()
+                        .when()
+                            .get(EFETUA_OPERACOES_SIMULACAO)
+                        .then()
+                            .extract()
+                            .path("cpf");
 
         given()
-                .pathParam("paramCpf", cpf)
+                .pathParam("paramCpf", arrayCPF.get(0).toString())
             .when()
                 .get(EFETUA_OPERACOES_SIMULACAO +  "/{paramCpf}")
-            .then().log().all()
+            .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("cpf", is(cpf));
+                .body("cpf", is(arrayCPF.get(0).toString()));
     }
 
     @Test
-    public void testSimulationWithCPFNotExisting(){
+    public void testSimulacaoComCPFNaoExistente(){
 
         given()
                 .pathParam("paramCpf", cpfNotExisting)
             .when()
                 .get(EFETUA_OPERACOES_SIMULACAO + "/{paramCpf}")
-            .then().log().all()
+            .then()
                 .statusCode(HttpStatus.SC_NOT_FOUND)
                 .body("mensagem", is("CPF " + cpfNotExisting + " não encontrado"));
     }

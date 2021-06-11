@@ -1,34 +1,42 @@
 package br.com.automacaoAPI.teste;
 
-import br.com.automacaoAPI.model.SimulaCredCPF;
+import br.com.automacaoAPI.model.Cliente;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 public class PostInsereNovaSimulacaoTeste extends BaseTeste  {
 
-
-
-
     @Test
-    public void testSimulationInsetExistingSimulation(){
+    public void testSimulacaoInsereClienteJaExistente(){
 
-        SimulaCredCPF simula = new SimulaCredCPF(
-                "Fulano",
-                "66414919004",
-                "fulano@gmail.com",
-                new BigDecimal(11000) ,
-                3,
-                true);
+        ArrayList arrayCPF = new ArrayList();
+
+        arrayCPF = given()
+                    .when()
+                        .get(EFETUA_OPERACOES_SIMULACAO)
+                    .then()
+                        .extract()
+                        .path("cpf");
+
+        Cliente simula = new Cliente(
+                "Deltrano",
+                arrayCPF.get(0).toString(),
+                "deltrano@gmail.com",
+                new BigDecimal(20000) ,
+                5,
+                false);
+
         given()
                 .body(simula)
             .when()
                 .post(EFETUA_OPERACOES_SIMULACAO)
-            .then()//.log().all()
+            .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("mensagem", is("CPF duplicado"));
     }
@@ -36,11 +44,11 @@ public class PostInsereNovaSimulacaoTeste extends BaseTeste  {
 
 
     @Test
-    public void testSimulationInsetNewSimulation(){
+    public void testSimulacaoInsereNovoCliente(){
 
-        SimulaCredCPF simula = new SimulaCredCPF(
+        Cliente simula = new Cliente(
                 "Jose Pai",
-                "98745632122",
+                "98745632123",
                 "JosePai@gmail.com",
                 new BigDecimal(10000) ,
                 5,
@@ -50,15 +58,15 @@ public class PostInsereNovaSimulacaoTeste extends BaseTeste  {
                 .body(simula)
             .when()
                 .post(EFETUA_OPERACOES_SIMULACAO)
-            .then()//.log().all();
+            .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("cpf", is(simula.getCpf()));
     }
 
     @Test
-    public void testSimulationInsetMissingAttribute(){
+    public void testSimulacaoInsereClienteFaltandoCPF(){
 
-        SimulaCredCPF simula = new SimulaCredCPF(
+        Cliente simula = new Cliente(
                 "Jose Paii",
                 "JosePaii@gmail.com",
                 new BigDecimal(10000) ,
@@ -68,7 +76,7 @@ public class PostInsereNovaSimulacaoTeste extends BaseTeste  {
                 .body(simula)
             .when()
                 .post(EFETUA_OPERACOES_SIMULACAO)
-            .then()//.log().all();
+            .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("erros.cpf", is("CPF não pode ser vazio"));
     }
